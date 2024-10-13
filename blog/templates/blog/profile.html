@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+<div class="block_main" style="height: 100vh;">
+    <div class="container">
+        <div class="container pt-3">
+
+            <div class="row d-flex justify-content-center">
+
+                <div class="col-md-7">
+
+                    <div class="card p-3 py-4">
+
+                        <div class="text-center">
+                            <img src="{{ profile.get_photo }}" width="100" class="rounded-circle">
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <span class="bg-secondary p-1 px-4 rounded text-white">{{ profile.status }}</span>
+                            <h5 class="mt-2 mb-0">@{{ profile.user.username }}</h5>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Полное имя</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ profile.user.first_name }} {{ profile.user.last_name }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Почта</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ profile.user.email }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Номер телефона</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ profile.phone_number }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Адресс</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ profile.address }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">О себе</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ profile.about }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Ранг</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ profile.rank }}
+                                </div>
+                            </div>
+                            <hr>
+
+
+                            <div class="buttons">
+
+                                <a href="{{ profile.telegram }}" class="btn btn-outline-info px-4" target ="_blank">Telegram</a>
+                                <a href="{{ profile.instagram }}" class="btn btn-outline-danger px-4 ms-3" target ="_blank">Instagram</a>
+
+                            </div>
+                            <a href="{{ request.META.HTTP_REFERER|escape }}"
+                               class="btn btn-outline-success btn-sm rounded mt-3">Назад</a>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock main %}

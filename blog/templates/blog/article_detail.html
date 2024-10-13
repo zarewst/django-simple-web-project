@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+<div class="block_main">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+
+            <div class="col-9">
+
+                <div class="card mt-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="title_category">Категория: {{ article.category }}</h3>
+
+                        <div class="d-flex justify-content-between">
+                            {% if profile.status_id == 1 %}
+                            <a href="{% url 'update' article.pk %}" class="btn btn-outline-warning btn-sm rounded mx-1">Изменить</a>
+                            <a href="{% url 'delete' article.pk %}"
+                               class="btn btn-outline-danger btn-sm rounded mx-1">Удалить</a>
+                            {% endif %}
+                            <a href="{% url 'index' %}"
+                               class="btn btn-outline-success btn-sm rounded mx-1">Назад</a>
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+                        {% if article.video %}
+                        <iframe width="100%" height="720" src="{{ article.video }}"
+                                title="Мысль сквозь вечность | Вечная Воля - трейлер." frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen></iframe>
+                        {% elif article.photo %}
+                        {% if 'https' in article.photo.url %}
+                        <img src="{{ article.photo }}" alt="" class="card-img-top">
+                        {% else %}
+                        <img src="{{ article.photo.url }}" alt="" class="card-img-top">
+                        {% endif %}
+                        {% else %}
+                        <img src="https://modnica.club/uploads/posts/2021-12/1639834648_14-modnica-club-p-besshovnii-air-tach-50.jpg"
+                             alt="" class="card-img-top">
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between py-4 align-items-center">
+                            <p class="text-dark fw-bold">Годы выхода: {{ article.releases }}<br>Возрастное ограничение:
+                                {{article.age_limit}}<br>Жанры: {{ article.genres }}<br>{{ article.episodes }}</p>
+
+                        </div>
+
+                        <h2>{{ article.title }}</h2>
+
+                        <p>{{ article.description }}</p>
+
+                        <span>Просмотры статьи: {{ article.views }}</span>
+
+                    </div>
+                </div>
+
+                {% if comments %}
+                <div class="container">
+                    <div class="row">
+
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h4 class="card-title">Recent Comments</h4>
+                                <h6 class="card-subtitle">Latest Comments section by users</h6></div>
+
+                            <div class="comment-widgets m-b-20">
+                                {% for comment in comments %}
+
+                                <div class="d-flex flex-row comment-row mt-3">
+                                    <div class="p-2"><span class="round"><img
+                                            class="rounded-circle shadow-1-strong me-3"
+                                            src="{{ comment.profile.get_photo }}"
+                                            alt="avatar" width="60"
+                                            height="60"/></span></div>
+                                    <div class="comment-text w-100">
+                                        <div class="comment-footer">
+                                            <span class="date">{{ comment.created_at }}</span>
+                                        </div>
+                                        <h5>@{{ comment.user.username }}:</h5>
+                                        <p class="m-b-5 m-t-10">{{ comment.text }}</p>
+
+                                    </div>
+                                    {% if comment.user == profile.user %}
+                                    {% if 'edit' in request.path %}
+                                    <form action="{% url 'save_edited_comment' comment.pk %}" method="POST">
+                                        {% csrf_token %}
+                                        {{ comment_form.as_p }}
+                                        <button class="btn btn-outline-success btn-sm rounded">Изменить комментарий</button>
+                                    </form>
+                                    {% endif %}
+                                    <a href="{% url 'edit_comment' article.pk comment.pk %}"
+                                       class="btn btn-outline-warning btn-sm rounded mx-1" style="height: 30px;">Изменить</a>
+                                    <a href="{% url 'delete_comment' comment.pk %}"
+                                       class="btn btn-outline-danger btn-sm rounded mx-1"
+                                       style="height: 30px;">Удалить</a>
+                                    {% elif profile.status_id == 1 %}
+                                    <a href="{% url 'delete_comment' comment.pk %}"
+                                       class="btn btn-outline-danger btn-sm rounded mx-1"
+                                       style="height: 30px;">Удалить</a>
+                                    {% endif %}
+                                </div>
+                                <hr class="my-0"/>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if 'edit' in request.get_full_path %}
+                {% else %}
+                <div class="card mt-1 p-2">
+                    {% if request.user.is_authenticated %}
+                    <form action="{% url 'save_comment' article.pk %}" method="POST">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <button class="btn btn-success rounded">Оставить комментарий</button>
+                    </form>
+
+                    {% else %}
+                    <div class="alert alert-warning text-center mt-3"
+                         role="alert">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock main %}

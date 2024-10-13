@@ -1,0 +1,23 @@
+{% load blog_tags %}
+<a href="{{ article.get_absolute_url }}" class="link_card">
+    <div class="row row-cols-1 g-4">
+        <div class="col">
+            <div class="card">
+                {% if article.photo %}
+                    {% if 'https' in article.photo.url %}
+                    <img src="{{ article.photo }}" alt="" class="card-img-top">
+                    {% else %}
+                    <img src="{{ article.photo.url }}" alt="" class="card-img-top">
+                    {% endif %}
+                {% else %}
+                <img src="https://modnica.club/uploads/posts/2021-12/1639834648_14-modnica-club-p-besshovnii-air-tach-50.jpg" alt="" class="card-img-top">
+                {% endif %}
+                <div class="card-body" style="max-height: 50vh;">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.description|truncatechars:100 }}</p>
+                    <span class="text-secondary">{{ article.episodes }}<br>Просмотры статьи: {{ article.views }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
